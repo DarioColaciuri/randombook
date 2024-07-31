@@ -1,0 +1,45 @@
+.songs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.songs-table th,
+.songs-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.songs-table th {
+  text-align: left;
+}
+
+/* .songs-table tr:nth-child(even) {
+
+  } */
+
+.songs-table tr:hover {
+  background-color: #6b6b6b;
+}
+
+.songs-table th,
+.songs-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.complete {
+  background-color: rgb(58, 83, 58);
+}
+
+.incomplete {
+  background-color: rgb(88, 66, 66);
+}
+
+.ongoing {
+  background-color: rgb(112, 112, 78);
+}
+
+.sort {
+  cursor: pointer;
+}
