@@ -83,20 +83,20 @@ const Songs = () => {
       status: 'incomplete',
       isAdding: false,
     });
-    getSongs();  // Actualiza la lista de canciones después de agregar una nueva
+    getSongs();  
   };
 
   const deleteSong = async (id) => {
     const songRef = doc(db, "canciones", id);
     await deleteDoc(songRef);
-    getSongs();  // Actualiza la lista de canciones después de eliminar una canción
+    getSongs();  
   };
 
   useEffect(() => {
     getSongs();
   }, [sortConfig]);
 
-  // Determina la clase según el valor de status
+
   const getStatusClass = (status) => {
     switch (status) {
       case 'complete':
@@ -112,11 +112,9 @@ const Songs = () => {
 
   return (
     <>
-      <h1>Aca van las canciones</h1>
-      <button onClick={() => setNewSong({ ...newSong, isAdding: true })}>+</button>
+      <button className="new-song-button" onClick={() => setNewSong({ ...newSong, isAdding: true })}><i className="bi bi-plus-circle"></i></button>
       {newSong.isAdding && (
         <div className="new-song-form">
-          <h2>Agregar Nueva Canción</h2>
           <input
             type="text"
             name="name"
@@ -136,7 +134,7 @@ const Songs = () => {
             value={newSong.transcription}
             onChange={handleNewSongChange}
           >
-            <option value="" disabled>Seleccione Transcription</option>
+            <option value="" disabled>transcriptor</option>
             {transcriptionOptions.map(option => (
               <option key={option} value={option}>{option}</option>
             ))}
@@ -151,8 +149,8 @@ const Songs = () => {
               <option key={option} value={option}>{option}</option>
             ))}
           </select>
-          <button onClick={addNewSong}>Agregar</button>
-          <button onClick={() => setNewSong({ ...newSong, isAdding: false })}>Cancelar</button>
+          <button className="edit" onClick={addNewSong}><i className="bi bi-plus-circle"></i></button>
+          <button className="delete" onClick={() => setNewSong({ ...newSong, isAdding: false })}><i className="bi bi-x-circle"></i></button>
         </div>
       )}
       <table className="songs-table">
@@ -194,9 +192,9 @@ const Songs = () => {
                       ))}
                     </select>
                   </td>
-                  <td>
-                    <button onClick={() => saveChanges(song.id)}>Guardar</button>
-                    <button onClick={() => setEditMode(null)}>Cancelar</button>
+                  <td className="actions">
+                    <button className="edit"  onClick={() => saveChanges(song.id)}><i className="bi bi-floppy"></i></button>
+                    <button className="delete" onClick={() => setEditMode(null)}><i className="bi bi-x-circle"></i></button>
                   </td>
                 </>
               ) : (
@@ -205,9 +203,9 @@ const Songs = () => {
                   <td>{song.composer}</td>
                   <td>{song.transcription}</td>
                   <td>{song.status}</td>
-                  <td>
-                    <button onClick={() => setEditMode(song.id)}>Editar</button>
-                    <button onClick={() => deleteSong(song.id)}>Eliminar</button>
+                  <td className="actions">
+                    <button className="edit" onClick={() => setEditMode(song.id)}><i className="bi bi-pencil"></i></button>
+                    <button className="delete" onClick={() => deleteSong(song.id)}><i className="bi bi-trash"></i></button>
                   </td>
                 </>
               )}
