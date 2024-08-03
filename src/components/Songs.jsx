@@ -11,6 +11,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import "./CSS/Songs.css";
+import Podium from "./Podium";
 
 const Songs = () => {
   const [songs, setSongs] = useState([]);
@@ -193,6 +194,7 @@ const Songs = () => {
   return (
     <>
       {showLoader && <Loader />}
+      <Podium />
       <button
         className="new-song-button"
         onClick={() => setNewSong({ ...newSong, isAdding: true })}
@@ -260,6 +262,7 @@ const Songs = () => {
       <table className="songs-table">
         <thead>
           <tr>
+            <th>#</th> {/* Nueva columna de numeración */}
             <th className="sort" onClick={() => handleSort("name")}>
               Nombre de canción ⬍
             </th>
@@ -278,13 +281,14 @@ const Songs = () => {
         <tbody>
           {isLoading ? (
             <tr>
-              <td colSpan="5" className="loading">
+              <td colSpan="6" className="loading">
                 Cargando... <Loader />
               </td>
             </tr>
           ) : (
-            songs.map((song) => (
+            songs.map((song, index) => (
               <tr key={song.id} className={getStatusClass(song.status)}>
+                <td>{index + 1}</td> {/* Numeración */}
                 {editMode === song.id ? (
                   <>
                     <td>

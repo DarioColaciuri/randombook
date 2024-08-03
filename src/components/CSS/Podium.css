@@ -1,0 +1,50 @@
+.podium {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .podium-item {
+    position: relative; /* Añadido para permitir posicionamiento absoluto del ícono */
+    width: 10rem;
+    padding: 5px;
+    border-radius: 8px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .podium-item.gold {
+    background-color: rgb(243, 225, 125);
+  }
+  
+  .podium-item.silver {
+    background-color: silver;
+  }
+  
+  .podium-item.bronze {
+    background-color: #cd7f32;
+  }
+  
+  .warn {
+    position: absolute;
+    top: 10px;
+    left: 10px; 
+    font-size: 1rem; 
+    color: red; 
+  }
+
+  .ok {
+    position: absolute;
+    top: 10px;
+    left: 10px; 
+    font-size: 1rem; 
+    color: rgb(0, 0, 0); 
+  }
