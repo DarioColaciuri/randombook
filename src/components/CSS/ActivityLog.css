@@ -1,0 +1,26 @@
+.logs-container {
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #333333;
+  margin: 2rem;
+}
+
+.logs {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.logs p {
+  margin: 5px 0;
+}
+
+  .status-complete {
+    color: rgb(86, 133, 86);
+  }
+  
+  .status-ongoing {
+    color: rgb(172, 172, 112);
+  }

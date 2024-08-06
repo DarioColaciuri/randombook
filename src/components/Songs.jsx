@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import "./CSS/Songs.css";
 import Podium from "./Podium";
+import ActivityLog from "./ActivityLog";
 
 const Songs = () => {
   const [songs, setSongs] = useState([]);
@@ -98,9 +99,28 @@ const Songs = () => {
     const songToUpdate = songs.find((song) => song.id === id);
     const songRef = doc(db, "canciones", id);
     await updateDoc(songRef, songToUpdate);
+  
+    if (songToUpdate.status === "complete" || songToUpdate.status === "ongoing") {
+      const date = new Date();
+      const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      const formattedTime = `${date.getHours()}:${date.getMinutes()}hs`;
+  
+      const statusClass = songToUpdate.status === "complete" ? "status-complete" : "status-ongoing";
+      const logMessage = `<strong>${songToUpdate.transcription}</strong> ha marcado como <strong class="${statusClass}">${songToUpdate.status}</strong> la canción <strong>${songToUpdate.name}</strong> el día <strong>${formattedDate}</strong> a las <strong>${formattedTime}</strong>`;
+  
+      try {
+        await addDoc(collection(db, "text"), {
+          message: logMessage,
+          timestamp: date
+        });
+      } catch (error) {
+        console.error("Error al guardar el log: ", error);
+      }
+    }
+  
     setEditMode(null);
     setShowLoader(false);
-
+  
     Toastify({
       text: "Cancion guardada correctamente",
       duration: 3000,
@@ -123,31 +143,41 @@ const Songs = () => {
   };
 
   const addNewSong = async () => {
-    setShowLoader(true);
-    const collectionRef = collection(db, "canciones");
-    await addDoc(collectionRef, newSong);
-    setNewSong({
-      name: "",
-      composer: "",
-      transcription: "",
-      status: "incomplete",
-      isAdding: false,
-    });
-    Toastify({
-      text: "Cancion creada correctamente",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top",
-      position: "right",
-      stopOnFocus: true,
-      style: {
-        background: "linear-gradient(to right, #1a00b0, #573dc9)",
-      },
-    }).showToast();
-    getSongs();
-    setShowLoader(false);
-  };
+  setShowLoader(true);
+  const collectionRef = collection(db, "canciones");
+  await addDoc(collectionRef, newSong);
+  
+  if (newSong.status === "completed" || newSong.status === "ongoing") {
+    const date = new Date();
+    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    const formattedTime = `${date.getHours()}:${date.getMinutes()}hs`;
+    const logMessage = `${newSong.transcription} ha marcado como ${newSong.status} la cancion ${newSong.name} el dia ${formattedDate} a las ${formattedTime}`;
+    await addDoc(collection(db, "text"), { message: logMessage });
+  }
+
+  setNewSong({
+    name: "",
+    composer: "",
+    transcription: "",
+    status: "incomplete",
+    isAdding: false,
+  });
+
+  Toastify({
+    text: "Cancion creada correctamente",
+    duration: 3000,
+    newWindow: true,
+    close: true,
+    gravity: "top",
+    position: "right",
+    stopOnFocus: true,
+    style: {
+      background: "linear-gradient(to right, #1a00b0, #573dc9)",
+    },
+  }).showToast();
+  getSongs();
+  setShowLoader(false);
+};
 
   const deleteSong = async (id) => {
     Swal.fire({
@@ -195,6 +225,7 @@ const Songs = () => {
     <>
       {showLoader && <Loader />}
       <Podium />
+      <ActivityLog />
       <button
         className="new-song-button"
         onClick={() => setNewSong({ ...newSong, isAdding: true })}
